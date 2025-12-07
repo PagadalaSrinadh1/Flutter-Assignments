@@ -1,0 +1,87 @@
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:audioplayers/audioplayers.dart';
+
+void main() {
+  runApp(const ProviderScope(child: MyApp()));
+}
+
+// ---------------------- RIVERPOD PROVIDERS ----------------------
+
+final colorProvider =
+    StateNotifierProvider<ColorController, Color>((ref) => ColorController());
+
+final noteProvider =
+    StateNotifierProvider<NoteController, int>((ref) => NoteController());
+
+// ---------------------- COLOR CONTROLLER ----------------------
+class ColorController extends StateNotifier<Color> {
+  ColorController() : super(Colors.white);
+
+  void changeColor() {
+    state = Colors
+        .primaries[Random().nextInt(Colors.primaries.length)]; // random color
+  }
+}
+
+// ---------------------- NOTE CONTROLLER ----------------------
+class NoteController extends StateNotifier<int> {
+  NoteController() : super(1);
+
+  final _player = AudioPlayer();
+
+  void playRandomNote() {
+    int noteIndex = Random().nextInt(10) + 1; // 1 to 10
+    state = noteIndex;
+    _player.play(AssetSource("note$noteIndex.wav"));
+  }
+}
+
+// ---------------------- MAIN APP ----------------------
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final bgColor = ref.watch(colorProvider);
+
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: bgColor,
+        appBar: AppBar(
+          backgroundColor: bgColor,
+          title: const Text("Riverpod Color + Music App"),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              ref.read(colorProvider.notifier).changeColor();
+              ref.read(noteProvider.notifier).playRandomNote();
+            },
+            child: const Text("Change Color & Play Note"),
+          ),
+        ),
+      ),
+    );
+  }
+}
+// Dependencies
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_riverpod: ^2.4.0
+  audioplayers: ^5.2.0
+// assests
+flutter:
+  assets:
+    - assets/note1.wav
+    - assets/note2.wav
+    - assets/note3.wav
+    - assets/note4.wav
+    - assets/note5.wav
+    - assets/note6.wav
+    - assets/note7.wav
+    - assets/note8.wav
+    - assets/note9.wav
+    - assets/note10.wav

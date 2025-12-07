@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "Pill Container Demo",
+      home: const Scaffold(
+        backgroundColor: Colors.white,
+        body: PillDemo(),
+      ),
+    );
+  }
+}
+
+class PillDemo extends StatelessWidget {
+  const PillDemo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        // place near top-left like the example image
+        padding: const EdgeInsets.only(left: 24.0, top: 24.0),
+        child: Row(
+          children: [
+            // The pill container
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              decoration: BoxDecoration(
+                // soft mint gradient fill
+                gradient: const LinearGradient(
+                  colors: [Color(0xFFBFFFEA), Color(0xFF9FFFE0)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                // rounded pill shape
+                borderRadius: BorderRadius.circular(40),
+                // outer glow + subtle drop shadow to mimic the pink glow
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.purple.withOpacity(0.35),
+                    blurRadius: 18,
+                    spreadRadius: 3,
+                    offset: const Offset(0, 0),
+                  ),
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.14),
+                    blurRadius: 6,
+                    offset: const Offset(2, 2),
+                  ),
+                ],
+                // thin outline to emphasize the pill
+                border: Border.all(
+                  color: Colors.purpleAccent.withOpacity(0.7),
+                  width: 2,
+                ),
+              ),
+              child: const Text(
+                "Hello I'm",
+                style: TextStyle(
+                  color: Color(0xFF003B36), // dark teal text
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+
+            // small spacer to match the sample layout
+            const SizedBox(width: 12),
+          ],
+        ),
+      ),
+    );
+  }
+}

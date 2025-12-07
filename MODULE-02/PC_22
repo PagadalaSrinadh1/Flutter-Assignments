@@ -1,0 +1,90 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CounterModel(),
+      child: MyApp(),
+    ),
+  );
+}
+
+class CounterModel extends ChangeNotifier {
+  int value = 0;
+
+  void increment() {
+    value++;
+    notifyListeners();
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: HomeScreen(),
+      routes: {
+        '/screen2': (_) => SecondScreen(),
+      },
+    );
+  }
+}
+
+// ===================== HOME SCREEN =====================
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counter = Provider.of<CounterModel>(context);
+
+    return Scaffold(
+      appBar: AppBar(title: Text("Home Screen")),
+      body: Center(
+        child: Text(
+          "Value: ${counter.value}",
+          style: TextStyle(fontSize: 30),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: counter.increment,
+        child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/screen2');
+          },
+          child: Text("Go to Screen 2"),
+        ),
+      ),
+    );
+  }
+}
+
+// ===================== SECOND SCREEN =====================
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counter = Provider.of<CounterModel>(context);
+
+    return Scaffold(
+      appBar: AppBar(title: Text("Second Screen")),
+      body: Center(
+        child: Text(
+          "Value: ${counter.value}",
+          style: TextStyle(fontSize: 30),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text("Back to Home"),
+        ),
+      ),
+    );
+  }
+}
